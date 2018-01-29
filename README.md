@@ -19,3 +19,5 @@ Additionally it can set your GIT user data globally for your computer.
 </code></pre>
 
 If some of the parameters are not set, they will not be changed.
+
+**You may have to mark the tool as executable on your computer before first usage**
