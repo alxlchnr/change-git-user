@@ -15,6 +15,8 @@ var email string
 var name string
 var path string
 var help bool
+var global bool
+var unset bool
 
 func init() {
 	flag.StringVar(&user, "user", "", "the API username of the new user")
@@ -22,6 +24,8 @@ func init() {
 	flag.StringVar(&email, "email", "", "the email of the new user")
 	flag.StringVar(&name, "name", "", "the name of the new user")
 	flag.StringVar(&path, "path", ".", "path where to look for git repositories")
+	flag.BoolVar(&global, "global", true, "apply user name and email globally")
+	flag.BoolVar(&unset, "unset", false, "unset user name and email")
 
 	flag.BoolVar(&help, "help", false, "show help")
 }
@@ -38,32 +42,40 @@ func main() {
 		fmt.Printf("email: %s\n", email)
 		fmt.Printf("name:  %s\n", name)
 		fmt.Printf("path:  %s\n", path)
+		fmt.Printf("global:  %b\n", global)
+		fmt.Printf("unset:  %b\n", unset)
 
-		go setGitUserNameGlobally()
+		if global {
+			go setGitUserName(name, global, unset, "")
 
-		go setGitUserEmailGlobally()
+			go setGitUserEmail(email, global, unset, "")
+		}
 
 		filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 			if info.IsDir() && filepath.Base(path) == ".git" {
-				go processGitRepo(path)
+				go processGitRepo(user, token, path)
 			}
-			return nil;
+			return nil
 		})
 	}
 }
-func processGitRepo(path string) {
+func processGitRepo(newUser string, newToken string, path string) {
 	gitRepoPath := filepath.Dir(path)
 	remotes := getGitRemoteUrls(gitRepoPath)
 	remotesToUrls := gitRemotesToMap(remotes)
 	for key, value := range remotesToUrls {
-		go changeGitRemoteUrl(value, key, gitRepoPath)
+		go changeGitRemoteUrl(newUser, newToken, value, key, gitRepoPath)
+		if !global {
+			go setGitUserEmail(email, false, unset, gitRepoPath)
+			go setGitUserName(name, false, unset, gitRepoPath)
+		}
 	}
 }
 
-func changeGitRemoteUrl(remoteUrl *GitUrl, remote string, gitRepoPath string) {
+func changeGitRemoteUrl(newUser string, newToken string, remoteUrl *GitUrl, remote string, gitRepoPath string) {
 	oldUrl := remoteUrl.ToUrl()
-	remoteUrl.SetUser(user)
-	remoteUrl.SetToken(token)
+	remoteUrl.SetUser(newUser)
+	remoteUrl.SetToken(newToken)
 	newUrl := remoteUrl.ToUrl()
 	fmt.Printf("Change git remote %s \nfrom %s \nto new url %s.\n", remote, oldUrl, newUrl)
 	cmd := exec.Command("git", "remote", "set-url", remote, newUrl)
@@ -72,26 +84,39 @@ func changeGitRemoteUrl(remoteUrl *GitUrl, remote string, gitRepoPath string) {
 	fmt.Println(string(out))
 }
 
-func setGitUserNameGlobally() {
-	if len(name) > 0 {
-		fmt.Printf("Set new global git user %s\n", name)
-		cmd := exec.Command("git", "config", "--global", "user.name", name)
-		out, _ := cmd.Output()
-		fmt.Println(string(out))
-	} else {
-		fmt.Println("No user name provided. Will not change global config.")
-	}
+func setGitUserName(newValue string, globally bool, unset bool, path string) {
+	setGitConfig("user.name", newValue, globally, unset, path)
 }
 
-func setGitUserEmailGlobally() {
-	if len(email) > 0 {
-		fmt.Printf("Set new global git user email %s\n", name)
-		cmd := exec.Command("git", "config", "--global", "user.email", email)
-		out, _ := cmd.Output()
-		fmt.Println(string(out))
+func setGitUserEmail(newValue string, globally bool, unset bool, path string) {
+	setGitConfig("user.email", newValue, globally, unset, path)
+}
+
+func setGitConfig(config string, value string, globally bool, unset bool, path string) {
+	args := []string{"config"}
+	if len(value) > 0 {
+		args = append(args, config, value)
+		fmt.Printf("Change %s to %s\n", config, value)
 	} else {
-		fmt.Println("No email address provided. Will not change global config.")
+		fmt.Printf("No %s provided. Will not change config.\n", config)
 	}
+
+	if unset {
+		args = append(args, "--unset", config)
+		fmt.Printf("Unset %s\n", config)
+	}
+
+	if globally {
+		args = append(args, "--global")
+	}
+
+	cmd := exec.Command("git", args...)
+	if !globally {
+		cmd.Dir = path
+	}
+
+	out, _ := cmd.Output()
+	fmt.Println(string(out))
 }
 
 func getGitRemoteUrls(gitRepoPath string) string {
