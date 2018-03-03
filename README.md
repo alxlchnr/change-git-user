@@ -1,5 +1,5 @@
 # change-git-user
-[![Go Report Card](https://goreportcard.com/badge/github.com/alxlchnr/change-git-user?style=flat-square)](https://goreportcard.com/report/github.com/alxlchnr/change-git-user)
+[![Go Report Card](https://goreportcard.com/badge/github.com/alxlchnr/change-git-user)](https://goreportcard.com/report/github.com/alxlchnr/change-git-user)
 [![Build Status](https://travis-ci.org/alxlchnr/change-git-user.svg?branch=master)](https://travis-ci.org/alxlchnr/change-git-user)
 
 This small command line tool helps you to change the remote urls of your GIT repositories. (Given an GIT-URL with following schema: https://{user}:{token}@{repo-url})
