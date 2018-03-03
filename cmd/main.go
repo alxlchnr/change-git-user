@@ -42,8 +42,8 @@ func main() {
 		fmt.Printf("email: %s\n", email)
 		fmt.Printf("name:  %s\n", name)
 		fmt.Printf("path:  %s\n", path)
-		fmt.Printf("global:  %b\n", global)
-		fmt.Printf("unset:  %b\n", unset)
+		fmt.Printf("global:  %s\n", global)
+		fmt.Printf("unset:  %s\n", unset)
 
 		if global {
 			go setGitUserName(name, global, unset, "")
