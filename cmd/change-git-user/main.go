@@ -1,7 +1,7 @@
 package change_git_user
 
 import (
-	"../../pkg/git"
+	"./internal/git"
 	"flag"
 	"fmt"
 	"os"
