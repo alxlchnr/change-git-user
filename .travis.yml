@@ -1,6 +1,4 @@
 language: go
-go_import_path: github.com/alxlchnr/change-git-user/cmd/change-git-user
 go:
   - "1.10.x"
-
 script: make all

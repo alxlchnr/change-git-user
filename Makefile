@@ -8,14 +8,14 @@ BINARY_NAME=change-git-user
 
 all: clean test build
 build:
-	$(GOBUILD) -o $(BINARY_NAME) -i ./cmd/change-git-user
+	$(GOBUILD) -o $(BINARY_NAME) ./cmd
 test:
 	$(GOTEST) -v ./... -run ^Test
 clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
 run:
-	$(GOBUILD) -o $(BINARY_NAME) -i ./cmd/change-git-user
+	$(GOBUILD) -o $(BINARY_NAME) ./cmd
 	./$(BINARY_NAME)
 deps:
 	$(GOGET) github.com/markbates/goth

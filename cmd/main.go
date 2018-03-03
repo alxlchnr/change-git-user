@@ -1,7 +1,6 @@
-package change_git_user
+package cmd
 
 import (
-	"./internal/git"
 	"flag"
 	"fmt"
 	"os"
@@ -73,7 +72,7 @@ func processGitRepo(newUser string, newToken string, path string) {
 	}
 }
 
-func changeGitRemoteUrl(newUser string, newToken string, remoteUrl *git.GitUrl, remote string, gitRepoPath string) {
+func changeGitRemoteUrl(newUser string, newToken string, remoteUrl *GitUrl, remote string, gitRepoPath string) {
 	oldUrl := remoteUrl.ToUrl()
 	remoteUrl.SetUser(newUser)
 	remoteUrl.SetToken(newToken)
@@ -129,13 +128,13 @@ func getGitRemoteUrls(gitRepoPath string) string {
 	return remotes
 }
 
-func gitRemotesToMap(remotes string) map[string]*git.GitUrl {
+func gitRemotesToMap(remotes string) map[string]*GitUrl {
 	remoteUrls := strings.Split(remotes, "\n")
-	remotesToUrls := make(map[string]*git.GitUrl)
+	remotesToUrls := make(map[string]*GitUrl)
 	for _, line := range remoteUrls {
 		if len(line) > 0 {
 			split := strings.Split(strings.Split(line, " ")[0], "\t")
-			remotesToUrls[split[0]] = git.NewGitUrl(split[1])
+			remotesToUrls[split[0]] = NewGitUrl(split[1])
 		}
 	}
 	return remotesToUrls
