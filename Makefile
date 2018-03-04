@@ -11,7 +11,7 @@ all: clean test vet build
 build:
 	$(GOBUILD) -o $(BINARY_NAME) ./cmd
 test:
-	$(GOTEST) -v ./... -run ^Test
+	$(GOTEST) -v ./... -run ^Test -coverprofile cp.out
 clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
