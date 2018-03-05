@@ -1,5 +1,7 @@
 package cmd
 
+//go:generate mockgen -source=gitCommand.go -destination=./mock_gitCommand.go -package=cmd
+
 import (
 	"fmt"
 	"os/exec"
@@ -26,10 +28,16 @@ var execCommand = func(name string, args ...string) Command {
 	return Command(&osCommand{exec.Command(name, args...)})
 }
 
-type GitCommands struct {
+type GitCommands interface {
+	ChangeGitConfig(config string, value string, globally bool, unset bool, path string)
+	GetGitRemoteUrls(gitRepoPath string) string
+	ChangeGitRemoteUrl(newUser string, newToken string, remoteUrl *GitUrl, remote string, gitRepoPath string)
 }
 
-func (*GitCommands) ChangeGitConfig(config string, value string, globally bool, unset bool, path string) {
+type GitCommandsImpl struct {
+}
+
+func (*GitCommandsImpl) ChangeGitConfig(config string, value string, globally bool, unset bool, path string) {
 	args := []string{"config"}
 	if len(value) > 0 && !unset {
 		args = append(args, config, value)
@@ -56,7 +64,7 @@ func (*GitCommands) ChangeGitConfig(config string, value string, globally bool, 
 	fmt.Println(string(out))
 }
 
-func (*GitCommands) GetGitRemoteUrls(gitRepoPath string) string {
+func (*GitCommandsImpl) GetGitRemoteUrls(gitRepoPath string) string {
 	fmt.Println("Found a git repository at " + gitRepoPath)
 	cmd := execCommand("git", "remote", "-v")
 	cmd.SetWorkingDir(gitRepoPath)
@@ -65,7 +73,7 @@ func (*GitCommands) GetGitRemoteUrls(gitRepoPath string) string {
 	return remotes
 }
 
-func (*GitCommands) ChangeGitRemoteUrl(newUser string, newToken string, remoteUrl *GitUrl, remote string, gitRepoPath string) {
+func (*GitCommandsImpl) ChangeGitRemoteUrl(newUser string, newToken string, remoteUrl *GitUrl, remote string, gitRepoPath string) {
 	oldUrl := remoteUrl.ToUrl()
 	remoteUrl.SetUser(newUser)
 	remoteUrl.SetToken(newToken)

@@ -5,9 +5,10 @@ GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOVET=$(GOCMD) vet
 GOGET=$(GOCMD) get
+GOGENERATE=$(GOCMD) generate
 BINARY_NAME=change-git-user
 
-all: clean test vet build
+all: deps clean generate test vet build
 build:
 	$(GOBUILD) -o $(BINARY_NAME) ./cmd
 test:
@@ -20,6 +21,8 @@ run:
 	./$(BINARY_NAME)
 vet:
 	$(GOVET) ./cmd
+generate:
+	$(GOGENERATE) ./...
 deps:
-	$(GOGET) github.com/markbates/goth
-	$(GOGET) github.com/markbates/pop
+	$(GOGET) github.com/golang/mock/gomock
+	$(GOGET) github.com/golang/mock/mockgen

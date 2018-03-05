@@ -53,13 +53,11 @@ func TestGitCommands_ChangeGitConfig(t *testing.T) {
 	}
 	tests := []struct {
 		name                string
-		g                   *GitCommands
 		args                args
 		expectedCommandArgs []string
 	}{
 		{
 			name: "should set config to new value",
-			g:    &GitCommands{},
 			args: args{
 				config:   "user.email",
 				value:    "new@gmail.com",
@@ -70,7 +68,6 @@ func TestGitCommands_ChangeGitConfig(t *testing.T) {
 			expectedCommandArgs: []string{"config", "user.email", "new@gmail.com"},
 		}, {
 			name: "should set config to new value globally",
-			g:    &GitCommands{},
 			args: args{
 				config:   "user.email",
 				value:    "new@gmail.com",
@@ -81,7 +78,6 @@ func TestGitCommands_ChangeGitConfig(t *testing.T) {
 			expectedCommandArgs: []string{"config", "user.email", "new@gmail.com", "--global"},
 		}, {
 			name: "should unset config to new value globally",
-			g:    &GitCommands{},
 			args: args{
 				config:   "user.email",
 				value:    "new@gmail.com",
@@ -92,7 +88,6 @@ func TestGitCommands_ChangeGitConfig(t *testing.T) {
 			expectedCommandArgs: []string{"config", "--unset", "user.email", "--global"},
 		}, {
 			name: "should unset config to new value",
-			g:    &GitCommands{},
 			args: args{
 				config:   "user.email",
 				value:    "new@gmail.com",
@@ -105,7 +100,7 @@ func TestGitCommands_ChangeGitConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			g := tt.g
+			g := &GitCommandsImpl{}
 			mockExecCommand(t, "it worked", tt.args.path, "git", tt.expectedCommandArgs...)
 			g.ChangeGitConfig(tt.args.config, tt.args.value, tt.args.globally, tt.args.unset, tt.args.path)
 		})
@@ -118,7 +113,6 @@ func TestGitCommands_GetGitRemoteUrls(t *testing.T) {
 	}
 	tests := []struct {
 		name                  string
-		g                     *GitCommands
 		args                  args
 		want                  string
 		expectedCommandArgs   []string
@@ -126,7 +120,6 @@ func TestGitCommands_GetGitRemoteUrls(t *testing.T) {
 	}{
 		{
 			name:                  "get remote URLs",
-			g:                     &GitCommands{},
 			args:                  args{gitRepoPath: "aLocalGitRepo"},
 			want:                  "expectedOutput",
 			expectedCommandArgs:   []string{"remote", "-v"},
@@ -135,7 +128,7 @@ func TestGitCommands_GetGitRemoteUrls(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			g := tt.g
+			g := &GitCommandsImpl{}
 			mockExecCommand(t, tt.expectedCommandOutput, tt.args.gitRepoPath, "git", tt.expectedCommandArgs...)
 			if got := g.GetGitRemoteUrls(tt.args.gitRepoPath); got != tt.want {
 				t.Errorf("GitCommands.GetGitRemoteUrls() = %v, want %v", got, tt.want)
@@ -154,13 +147,11 @@ func TestGitCommands_ChangeGitRemoteUrl(t *testing.T) {
 	}
 	tests := []struct {
 		name                string
-		g                   *GitCommands
 		args                args
 		expectedCommandArgs []string
 	}{
 		{
 			name: "get remote URLs",
-			g:    &GitCommands{},
 			args: args{
 				gitRepoPath: "aLocalGitRepo",
 				newUser:     "aUserName",
@@ -173,7 +164,7 @@ func TestGitCommands_ChangeGitRemoteUrl(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			g := tt.g
+			g := &GitCommandsImpl{}
 			mockExecCommand(t, "it worked...", tt.args.gitRepoPath, "git", tt.expectedCommandArgs...)
 			g.ChangeGitRemoteUrl(tt.args.newUser, tt.args.newToken, tt.args.remoteUrl, tt.args.remote, tt.args.gitRepoPath)
 		})
