@@ -2,6 +2,8 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/alxlchnr/change-git-user)](https://goreportcard.com/report/github.com/alxlchnr/change-git-user)
 [![Build Status](https://travis-ci.org/alxlchnr/change-git-user.svg?branch=master)](https://travis-ci.org/alxlchnr/change-git-user)
 [![codecov](https://codecov.io/gh/alxlchnr/change-git-user/branch/master/graph/badge.svg)](https://codecov.io/gh/alxlchnr/change-git-user)
+[![Maintainability](https://api.codeclimate.com/v1/badges/383ef543a78b8907ba6c/maintainability)](https://codeclimate.com/github/alxlchnr/change-git-user/maintainability)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 This small command line tool helps you to change the remote urls of your GIT repositories. (Given an GIT-URL with following schema: https://{user}:{token}@{repo-url})
 Starting with a provided folder it will search for GIT repositories recursively and will apply the changes.
