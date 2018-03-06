@@ -10,17 +10,17 @@ BINARY_NAME=change-git-user
 
 all: deps clean generate test vet build
 build:
-	$(GOBUILD) -o $(BINARY_NAME) ./cmd
+	$(GOBUILD) -o $(BINARY_NAME) ./main.go
 test:
-	$(GOTEST) -v ./... -run ^Test -coverprofile cp.out
+	$(GOTEST) -v ./... -run ^Test
 clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
 run:
-	$(GOBUILD) -o $(BINARY_NAME) ./cmd
+	$(GOBUILD) -o $(BINARY_NAME) ./main.go
 	./$(BINARY_NAME)
 vet:
-	$(GOVET) ./cmd
+	$(GOVET) ./...
 generate:
 	$(GOGENERATE) ./...
 deps:

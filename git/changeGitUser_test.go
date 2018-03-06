@@ -1,4 +1,4 @@
-package cmd
+package git
 
 import (
 	"github.com/golang/mock/gomock"

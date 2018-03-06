@@ -1,8 +1,9 @@
-package cmd
+package main
 
 import (
 	"flag"
 	"fmt"
+	"github.com/alxlchnr/change-git-user/git"
 	"os"
 	"path/filepath"
 )
@@ -28,8 +29,8 @@ func init() {
 	flag.BoolVar(&help, "help", false, "show help")
 }
 
-var initChangeGitUser = func(params *ChangeGitParameters) *ChangeGitUser {
-	return &ChangeGitUser{Parameters: params, GitCommands: GitCommands(&GitCommandsImpl{})}
+var initChangeGitUser = func(params *git.ChangeGitParameters) *git.ChangeGitUser {
+	return &git.ChangeGitUser{Parameters: params, GitCommands: git.GitCommands(&git.GitCommandsImpl{})}
 }
 var walkDirectories = filepath.Walk
 
@@ -45,7 +46,7 @@ func main() {
 }
 
 func doChangeGitUser(user string, token string, email string, name string, path string, global bool, unset bool) {
-	params := &ChangeGitParameters{
+	params := &git.ChangeGitParameters{
 		User:   user,
 		Token:  token,
 		Email:  email,
