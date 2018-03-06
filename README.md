@@ -4,7 +4,12 @@
 [![codecov](https://codecov.io/gh/alxlchnr/change-git-user/branch/master/graph/badge.svg)](https://codecov.io/gh/alxlchnr/change-git-user)
 
 This small command line tool helps you to change the remote urls of your GIT repositories. (Given an GIT-URL with following schema: https://{user}:{token}@{repo-url})
+Starting with a provided folder it will search for GIT repositories recursively and will apply the changes.
+
 Additionally it can set your GIT user data globally for your computer.
+
+## Prerequisites
+You need to have GIT installed on your computer.
 
 ## Possible parameters
 <pre><code>
@@ -28,4 +33,9 @@ Additionally it can set your GIT user data globally for your computer.
 
 If some of the parameters are not set, they will not be changed.
 
-**You may have to mark the tool as executable on your computer before first usage**
+You can download releases of the command line tool from this github repository or if you have Go installed 
+on your computer you can also get the executable by executing
+        
+        go get github.com/alxlchnr/change-git-user
+         
+
