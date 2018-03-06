@@ -33,6 +33,8 @@ You need to have GIT installed on your computer.
 
 If some of the parameters are not set, they will not be changed.
 
+## Install
+
 You can download releases of the command line tool from this github repository or if you have Go installed 
 on your computer you can also get the executable by executing
         
