@@ -12,7 +12,7 @@ all: deps clean generate test vet build
 build:
 	$(GOBUILD) -o $(BINARY_NAME) ./main.go
 test:
-	$(GOTEST) -v ./... -run ^Test
+	$(GOTEST) ./... -run ^Test -coverprofile=coverage.txt -covermode=atomic
 clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
