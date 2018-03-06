@@ -21,8 +21,8 @@ on your computer you can also get the executable by executing
 
 
 ## Possible parameters
-<pre><code>
-  -email string
+
+    -email string
       	the email of the new user
     -global
       	apply user name and email globally (default true)
@@ -38,6 +38,6 @@ on your computer you can also get the executable by executing
       	unset user name and email
     -user string
       	the API username of the new user
-</code></pre>
+
 
 If some of the parameters are not set, they will not be changed.
