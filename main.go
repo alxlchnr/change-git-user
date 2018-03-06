@@ -59,6 +59,10 @@ func doChangeGitUser(user string, token string, email string, name string, path 
 
 	changeGitUser := initChangeGitUser(params)
 
+	if !changeGitUser.GitCommands.CheckForGitInstallation() {
+		panic("You need to have GIT installed on your computer.")
+	}
+
 	if global {
 		go changeGitUser.ChangeGlobalUserConfig()
 	}

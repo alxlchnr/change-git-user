@@ -170,3 +170,34 @@ func TestGitCommands_ChangeGitRemoteUrl(t *testing.T) {
 		})
 	}
 }
+
+func TestGitCommandsImpl_CheckForGitInstallation(t *testing.T) {
+	tests := []struct {
+		name                  string
+		want                  bool
+		expectedCommandArgs   []string
+		expectedCommandOutput string
+	}{
+		{
+			name:                  "call to git --version returns valid version string",
+			want:                  true,
+			expectedCommandArgs:   []string{"--version"},
+			expectedCommandOutput: "git version 2.6.2",
+		},
+		{
+			name:                  "call to git --version returns invalid version string",
+			want:                  false,
+			expectedCommandArgs:   []string{"--version"},
+			expectedCommandOutput: "some string",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			g := &GitCommandsImpl{}
+			mockExecCommand(t, tt.expectedCommandOutput, "", "git", tt.expectedCommandArgs...)
+			if got := g.CheckForGitInstallation(); got != tt.want {
+				t.Errorf("GitCommandsImpl.CheckForGitInstallation() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

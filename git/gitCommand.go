@@ -5,6 +5,7 @@ package git
 import (
 	"fmt"
 	"os/exec"
+	"strings"
 )
 
 type Command interface {
@@ -32,6 +33,7 @@ type GitCommands interface {
 	ChangeGitConfig(config string, value string, globally bool, unset bool, path string)
 	GetGitRemoteUrls(gitRepoPath string) string
 	ChangeGitRemoteUrl(newUser string, newToken string, remoteUrl *GitUrl, remote string, gitRepoPath string)
+	CheckForGitInstallation() bool
 }
 
 type GitCommandsImpl struct {
@@ -83,4 +85,15 @@ func (*GitCommandsImpl) ChangeGitRemoteUrl(newUser string, newToken string, remo
 	cmd.SetWorkingDir(gitRepoPath)
 	out, _ := cmd.Output()
 	fmt.Println(string(out))
+}
+
+func (*GitCommandsImpl) CheckForGitInstallation() bool {
+	cmd := execCommand("git", "--version")
+	out, err := cmd.Output()
+	if err != nil {
+		return false
+	}
+
+	gitVersionOutput := string(out)
+	return strings.Index(gitVersionOutput, "git version ") != -1
 }
