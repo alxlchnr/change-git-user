@@ -1,4 +1,4 @@
-package cmd
+package git
 
 type ChangeGitParameters struct {
 	User   string

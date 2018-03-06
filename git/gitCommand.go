@@ -1,6 +1,6 @@
-package cmd
+package git
 
-//go:generate mockgen -source=gitCommand.go -destination=./mock_gitCommand.go -package=cmd
+//go:generate mockgen -source=gitCommand.go -destination=./mock_gitCommand.go -package=git
 
 import (
 	"fmt"
